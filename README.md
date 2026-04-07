@@ -1,22 +1,27 @@
-# embweek6 - PWM 제어 실습
+# embweek6 - PWM · Sensor 실습 (PPT 기준)
 
 중앙대학교 전자전기공학부 `임베디드 시스템 설계실습` 6주차용 예제/과제 레포입니다.
 
-이번 주 실습은 지난주 WiringPi 기반 GPIO 기초 제어를 바탕으로, **PWM(Pulse Width Modulation)** 을 이용한 출력 제어를 다룹니다.
+이번 실습은 **첨부 PPT의 흐름과 파일명**을 기준으로 진행합니다.
+학생들은 아래 예제들을 **컴파일 및 실행**해 보고, 마지막에 이를 바탕으로 한 **통합 과제 1문제**를 해결합니다.
 
-## 레포 구성
+> 주의:
+> - **푸쉬버튼은 사용하지 않습니다.**
+> - **서보 모터는 이론 설명 및 코드 확인 중심**으로 다루며, 라즈베리파이 5 전원 안전 문제 때문에 **실제 연결은 가급적 하지 않는 방향**을 기본으로 합니다.
+
+## 내일 실습에서 사용하는 핵심 파일
 
 ```text
 embweek6/
-├── softpwm_led.c
-├── hardpwm_led.c
-├── pwmservo.c
-├── wiringultra.c
-├── wiringpir.c
-├── pir_gate_assignment/
+├── led_pwm.c
+├── music_pwm.c
+├── servo_pwm.c
+├── HC_SR04.c
+├── HC_SR501.c
+├── sensor_alarm_assignment/
 │   ├── main.c
-│   ├── gate.c
-│   ├── gate.h
+│   ├── alarm.c
+│   ├── alarm.h
 │   └── README.md
 └── docs/
     └── week6_pwm_lab.md
@@ -24,84 +29,74 @@ embweek6/
 
 ## 실습 흐름
 
-1. `softpwm_led.c`
-   - software PWM으로 LED 밝기 조절
-2. `hardpwm_led.c`
-   - hardware PWM으로 LED duty 제어
-3. `pwmservo.c`
-   - hardware PWM으로 서보 모터 각도 제어
-4. `wiringultra.c`
-   - HC-SR04 초음파 센서 거리 측정
-5. `wiringpir.c`
-   - PIR 센서 입력 감지
-6. `pir_gate_assignment/`
-   - PIR 감지 시 LED 밝기 + 서보 모터를 함께 제어하는 통합 과제
+1. `led_pwm.c`
+   - hardware PWM LED 제어
+2. `music_pwm.c`
+   - 피에조 부저로 간단한 음 재생
+3. `servo_pwm.c`
+   - 서보 PWM 코드 구조 확인 및 컴파일
+   - 실제 배선/실행은 선택 또는 시연 대체
+4. `HC_SR04.c`
+   - 초음파 센서 거리 측정
+5. `HC_SR501.c`
+   - PIR 센서 움직임 감지
+6. `sensor_alarm_assignment/`
+   - PIR + 초음파 + LED PWM + 부저를 통합한 최종 과제
 
-## 컴파일 예시
+## 예제 컴파일 명령
 
-### 1) software PWM LED
+### 1) LED PWM
 ```bash
-gcc -o softpwm_led softpwm_led.c -lwiringPi
-./softpwm_led
+gcc -o led_pwm led_pwm.c -lwiringPi
+./led_pwm 18
 ```
 
-### 2) hardware PWM LED
+### 2) Music PWM
 ```bash
-gcc -o hardpwm_led hardpwm_led.c -lwiringPi
-./hardpwm_led
+gcc -o music_pwm music_pwm.c -lwiringPi
+./music_pwm
 ```
 
-### 3) servo motor
+### 3) Servo PWM
 ```bash
-gcc -o pwmservo pwmservo.c -lwiringPi
-./pwmservo
+gcc -o servo_pwm servo_pwm.c -lwiringPi
+./servo_pwm
 ```
 
-### 4) ultrasonic sensor
+### 4) HC-SR04
 ```bash
-gcc -o wiringultra wiringultra.c -lwiringPi
-./wiringultra
+gcc -o HC_SR04 HC_SR04.c -lwiringPi
+./HC_SR04
 ```
 
-### 5) PIR sensor
+### 5) HC-SR501
 ```bash
-gcc -o wiringpir wiringpir.c -lwiringPi
-./wiringpir
+gcc -o HC_SR501 HC_SR501.c -lwiringPi
+./HC_SR501
 ```
 
-### 6) 통합 과제
+### 6) 최종 과제
 ```bash
-cd pir_gate_assignment
-gcc -o pir_gate main.c gate.c -lwiringPi
-./pir_gate
+cd sensor_alarm_assignment
+gcc -o sensor_alarm main.c alarm.c -lwiringPi
+./sensor_alarm
 ```
 
-## 하드웨어 연결 요약
+## 핀 번호 기준
+이번 레포의 PPT 기반 예제들은 **BCM 번호 기준**으로 작성되어 있으며,
+`wiringPiSetupGpio()`를 사용합니다.
 
-### Software PWM LED
-- LED anode → 220Ω 저항 → physical pin 16 (BCM GPIO23, wiringPi 4)
-- LED cathode → GND
+## 최종 과제 개요
+최종 과제는 다음 동작을 구현합니다.
 
-### Hardware PWM LED / Servo
-- physical pin 12 (BCM GPIO18, wiringPi 1)
-- `hardpwm_led.c` 를 실행할 때는 LED 회로를,
-- `pwmservo.c` / `servo_gate_assignment` 를 실행할 때는 서보 모터를 연결해서 사용
+- PIR 센서가 움직임을 감지하면
+- HC-SR04로 거리를 측정하고
+- 가까운 거리에서만
+  - LED 밝기를 변화시키고
+  - 부저 경고음을 재생한다.
 
-### PIR sensor
-- PIR output → physical pin 18 (BCM GPIO24, wiringPi 5)
-- VCC → 5V
-- GND → GND
-
-### HC-SR04 ultrasonic sensor
-- TRIG → physical pin 13 (BCM GPIO27, wiringPi 2)
-- ECHO → physical pin 15 (BCM GPIO22, wiringPi 3)
-- VCC → 5V
-- GND → GND
-
-### 통합 과제
-- PIR 감지 시 LED 밝기 변화 + 서보 모터 개폐 시퀀스 실행
-- 초음파 센서는 확장 미션으로 거리 조건 추가 가능
+즉, **push button 없이**, 그리고 **servo 없이도 충분히 완성 가능한 통합 과제**로 정리했습니다.
 
 ## 참고
-- 이번 주는 **Makefile 없이 gcc 명령어로 직접 컴파일**하는 흐름을 유지합니다.
-- 핀 번호는 기본적으로 `wiringPiSetup()` 기준 **wiringPi 번호 체계**를 사용합니다.
+- 레포 안에 이전 초안 파일/폴더가 남아 있을 수 있지만, **내일 실습은 위 6개 항목 기준**으로 보면 됩니다.
+- 자세한 문제 설명은 `docs/week6_pwm_lab.md`를 참고하세요.
