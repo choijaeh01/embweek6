@@ -95,8 +95,6 @@ gcc -o sensor_alarm main.c alarm.c -lwiringPi
   - LED 밝기를 변화시키고
   - 부저 경고음을 재생한다.
 
-즉, **push button 없이**, 그리고 **servo 없이도 충분히 완성 가능한 통합 과제**로 정리했습니다.
 
 ## 참고
-- 현재 공개 레포는 **PPT 기준 파일만 남기도록 정리된 상태**입니다.
 - 자세한 문제 설명은 `docs/week6_pwm_lab.md`를 참고하세요.
