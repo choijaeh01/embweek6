@@ -4,9 +4,6 @@
 
 int main(void)
 {
-    int prev_state = HIGH;
-    int cur_state;
-
     if (wiringPiSetup() == -1) {
         printf("wiringPiSetup failed\n");
         return 1;
@@ -17,18 +14,11 @@ int main(void)
         return 1;
     }
 
-    printf("버튼을 누르면 LED 밝기와 서보 모터를 이용한 게이트 시퀀스를 실행합니다.\n");
+    printf("LED 밝기와 서보 모터를 이용한 게이트 시퀀스를 반복 실행합니다.\n");
 
     while (1) {
-        cur_state = isButtonPressed();
-
-        if (prev_state == HIGH && cur_state == LOW) {
-            printf("버튼 입력 감지 -> 게이트 시퀀스 실행\n");
-            runGateSequence();
-        }
-
-        prev_state = cur_state;
-        delay(50);
+        runGateSequence();
+        delay(2000);
     }
 
     return 0;

@@ -20,7 +20,6 @@ LED 밝기 조절과 서보 모터 제어를 구현하는 데 있다.
 - 브레드보드
 - LED 1개
 - 220Ω 저항 1개
-- 택트 스위치 1개
 - 서보 모터 1개
 - 점퍼선
 - WiringPi 설치 완료된 Raspberry Pi OS 환경
@@ -60,11 +59,6 @@ embweek6/
 - servo signal → physical pin 12 (BCM GPIO18, wiringPi 1)
 - servo VCC → 5V
 - servo GND → GND
-
-### 3.4 button (통합 과제)
-- 한쪽 → physical pin 11 (BCM GPIO17, wiringPi 0)
-- 다른 쪽 → GND
-- 내부 pull-up 사용
 
 ---
 
@@ -137,24 +131,21 @@ gcc -o pwmservo pwmservo.c -lwiringPi
 
 ## 7. 실습 4 - 통합 과제: Servo Gate
 ### 7.1 목적
-- 버튼 입력과 PWM 출력을 결합한 간단한 임베디드 응용 프로그램을 작성한다.
+- PWM 출력을 결합한 간단한 임베디드 응용 프로그램을 작성한다.
 - 함수 분리와 순차 제어 흐름을 연습한다.
 
 ### 7.2 요구사항
 `servo_gate_assignment/gate.c`에서 다음 조건을 만족하도록 구현하시오.
 
 1. `pwmInit()`
-   - 버튼 핀을 입력으로 설정한다.
-   - 내부 pull-up을 적용한다.
    - LED soft PWM을 초기화한다.
    - 서보 PWM 출력을 초기화한다.
 
-2. `isButtonPressed()`
-   - 버튼 현재 상태를 읽어 반환한다.
-   - 내부 pull-up 기준으로 누르면 LOW가 되도록 처리한다.
+2. `setServoAngle()`
+   - 입력 각도(0~180도)를 PWM 값으로 변환해 서보 모터를 제어한다.
 
 3. `runGateSequence()`
-   - 버튼이 눌리면 LED 밝기를 0%에서 100%로 증가시킨다.
+   - LED 밝기를 0%에서 100%로 증가시킨다.
    - 서보를 0도에서 90도로 이동시킨다.
    - 잠시 대기 후 다시 0도로 복귀시킨다.
    - LED 밝기를 다시 감소시킨다.
@@ -167,10 +158,10 @@ gcc -o servo_gate main.c gate.c -lwiringPi
 ```
 
 ### 7.4 확인 사항
-- 버튼을 누르면 시퀀스가 한 번 실행되는가?
+- 프로그램이 자동으로 시퀀스를 반복 실행하는가?
 - LED 밝기 변화가 보이는가?
 - 서보가 열림/닫힘 동작처럼 움직이는가?
-- GPIO 입력과 PWM 출력을 함께 설명할 수 있는가?
+- soft PWM과 hardware PWM의 역할 차이를 설명할 수 있는가?
 
 ---
 

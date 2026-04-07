@@ -69,10 +69,9 @@ gcc -o servo_gate main.c gate.c -lwiringPi
 - `hardpwm_led.c` 를 실행할 때는 LED 회로를,
 - `pwmservo.c` / `servo_gate_assignment` 를 실행할 때는 서보 모터를 연결해서 사용
 
-### Button (통합 과제)
-- button input → physical pin 11 (BCM GPIO17, wiringPi 0)
-- 나머지 한쪽은 GND
-- 내부 pull-up 사용 기준으로 작성됨
+### 통합 과제 (버튼 없이 진행)
+- 이번 주 통합 과제는 버튼 입력 없이 진행
+- LED 밝기 변화 + 서보 모터 개폐 시퀀스를 자동 반복 실행
 
 ## 참고
 - 이번 주는 **Makefile 없이 gcc 명령어로 직접 컴파일**하는 흐름을 유지합니다.
