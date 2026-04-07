@@ -5,9 +5,10 @@
 
 /*
  * 과제 목표:
- * - LED 밝기가 서서히 증가하고,
+ * - PIR 센서가 움직임을 감지하면,
+ *   LED 밝기가 서서히 증가하고,
  *   서보 모터가 0도 -> 90도 -> 0도로 움직이는 게이트 시퀀스를 구현한다.
- * - 이번 주는 버튼 입력 없이 PWM 출력 제어 자체에 집중한다.
+ * - PWM 이후 진도인 PIR 센서 입력과 PWM 출력을 함께 연습한다.
  */
 
 static void setLedBrightness(int percent)
@@ -22,11 +23,13 @@ int pwmInit(void)
     /*
      * TODO 1.
      * 아래 초기화를 수행하시오.
-     * 1) LED 핀에 softPwmCreate(LED, 0, 100) 적용
-     * 2) SERVO 핀을 PWM_OUTPUT으로 설정
-     * 3) pwmSetMode(PWM_MODE_MS), pwmSetRange(SERVO_RANGE), pwmSetClock(SERVO_CLOCK) 설정
+     * 1) PIR 핀을 INPUT으로 설정
+     * 2) LED 핀에 softPwmCreate(LED, 0, 100) 적용
+     * 3) SERVO 핀을 PWM_OUTPUT으로 설정
+     * 4) pwmSetMode(PWM_MODE_MS), pwmSetRange(SERVO_RANGE), pwmSetClock(SERVO_CLOCK) 설정
      *
      * 힌트:
+     * - PIR은 digitalRead()로 상태를 읽는다.
      * - LED 밝기는 0~100 범위로 제어
      * - 서보는 hardware PWM 사용
      */
@@ -34,10 +37,23 @@ int pwmInit(void)
     return 0;
 }
 
-void setServoAngle(int angle)
+int isMotionDetected(void)
 {
     /*
      * TODO 2.
+     * PIR 센서 현재 상태를 읽어 반환하시오.
+     *
+     * 힌트:
+     * - 움직임 감지 시 HIGH, 아니면 LOW로 처리되는 일반적인 PIR 모듈을 가정
+     */
+
+    return LOW;
+}
+
+void setServoAngle(int angle)
+{
+    /*
+     * TODO 3.
      * 입력 각도(0~180도)를 PWM 값으로 변환해 서보 모터를 제어하시오.
      *
      * 힌트:
@@ -53,7 +69,7 @@ void runGateSequence(void)
     int angle;
 
     /*
-     * TODO 3.
+     * TODO 4.
      * 아래 순서대로 동작하는 게이트 시퀀스를 작성하시오.
      *
      * (1) LED 밝기를 0% -> 100%로 서서히 증가

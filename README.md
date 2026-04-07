@@ -11,7 +11,9 @@ embweek6/
 ├── softpwm_led.c
 ├── hardpwm_led.c
 ├── pwmservo.c
-├── servo_gate_assignment/
+├── wiringultra.c
+├── wiringpir.c
+├── pir_gate_assignment/
 │   ├── main.c
 │   ├── gate.c
 │   ├── gate.h
@@ -28,8 +30,12 @@ embweek6/
    - hardware PWM으로 LED duty 제어
 3. `pwmservo.c`
    - hardware PWM으로 서보 모터 각도 제어
-4. `servo_gate_assignment/`
-   - 버튼 입력을 받아 LED 밝기 + 서보 모터를 함께 제어하는 통합 과제
+4. `wiringultra.c`
+   - HC-SR04 초음파 센서 거리 측정
+5. `wiringpir.c`
+   - PIR 센서 입력 감지
+6. `pir_gate_assignment/`
+   - PIR 감지 시 LED 밝기 + 서보 모터를 함께 제어하는 통합 과제
 
 ## 컴파일 예시
 
@@ -51,11 +57,23 @@ gcc -o pwmservo pwmservo.c -lwiringPi
 ./pwmservo
 ```
 
-### 4) 통합 과제
+### 4) ultrasonic sensor
 ```bash
-cd servo_gate_assignment
-gcc -o servo_gate main.c gate.c -lwiringPi
-./servo_gate
+gcc -o wiringultra wiringultra.c -lwiringPi
+./wiringultra
+```
+
+### 5) PIR sensor
+```bash
+gcc -o wiringpir wiringpir.c -lwiringPi
+./wiringpir
+```
+
+### 6) 통합 과제
+```bash
+cd pir_gate_assignment
+gcc -o pir_gate main.c gate.c -lwiringPi
+./pir_gate
 ```
 
 ## 하드웨어 연결 요약
@@ -69,9 +87,20 @@ gcc -o servo_gate main.c gate.c -lwiringPi
 - `hardpwm_led.c` 를 실행할 때는 LED 회로를,
 - `pwmservo.c` / `servo_gate_assignment` 를 실행할 때는 서보 모터를 연결해서 사용
 
-### 통합 과제 (버튼 없이 진행)
-- 이번 주 통합 과제는 버튼 입력 없이 진행
-- LED 밝기 변화 + 서보 모터 개폐 시퀀스를 자동 반복 실행
+### PIR sensor
+- PIR output → physical pin 18 (BCM GPIO24, wiringPi 5)
+- VCC → 5V
+- GND → GND
+
+### HC-SR04 ultrasonic sensor
+- TRIG → physical pin 13 (BCM GPIO27, wiringPi 2)
+- ECHO → physical pin 15 (BCM GPIO22, wiringPi 3)
+- VCC → 5V
+- GND → GND
+
+### 통합 과제
+- PIR 감지 시 LED 밝기 변화 + 서보 모터 개폐 시퀀스 실행
+- 초음파 센서는 확장 미션으로 거리 조건 추가 가능
 
 ## 참고
 - 이번 주는 **Makefile 없이 gcc 명령어로 직접 컴파일**하는 흐름을 유지합니다.
