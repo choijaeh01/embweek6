@@ -1,0 +1,8 @@
+*.o
+*.out
+*.exe
+softpwm_led
+hardpwm_led
+pwmservo
+servo_gate_assignment/servo_gate
+*.zip
