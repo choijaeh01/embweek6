@@ -52,14 +52,31 @@ embweek6/
 │   ├── alarm.c
 │   ├── alarm.h
 │   └── README.md
-└── docs/
-    └── week6_pwm_lab.md
+└── README.md
 ```
 ---
 
-## 4. 번호 체계
-이번 PPT 기반 예제는 **BCM GPIO 번호 기준**으로 작성한다.
-즉, `wiringPiSetupGpio()`를 사용한다.
+## 4. 핀 연결
+
+### LED PWM
+- LED anode → 220Ω 저항 → BCM 18 (physical pin 12)
+- LED cathode → GND
+
+### Piezo buzzer
+- signal → BCM 12 (physical pin 32)
+- GND → GND
+
+### HC-SR04
+- TRIG → BCM 23 (physical pin 16)
+- ECHO → BCM 24 (physical pin 18)
+- VCC → 5V
+- GND → GND
+
+### HC-SR501
+- OUT → BCM 17 (physical pin 11)
+- VCC → 5V
+- GND → GND
+
 
 ---
 
